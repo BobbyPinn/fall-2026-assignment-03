@@ -3,10 +3,10 @@ import request from 'supertest';
 import { app } from '../src/index.js';
 
 describe('Part 2: Time Logs Tests', () => {
-  it('should pass placeholder test', () => {
+  it('should pass placeholder test', async () => {
     // TODO: Student implementation - Part 2: Time Logging Tests
     const user = await request(app)
-    .post('users')
+    .post('/users')
     .send({ name: 'Time user', email: 'time@example.com'});
 
     const ticket = await request(app)
@@ -28,6 +28,7 @@ describe('Part 2: Time Logs Tests', () => {
 
 
     // Verify aggregation math
-    expect(total.status).toBe(true);
+    expect(total.status).toBe(200);
+    expect(total.body.total_hours).toBe(10);
   });
 });
