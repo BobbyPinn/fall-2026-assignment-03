@@ -45,7 +45,10 @@ router.post('/', authMiddleware, async (req, res) => {
 
   try {
     const ticket = await createTicket({
-        title,description,creator_id: res.locals.userId,});
+      title,
+      description,
+      creator_id: res.locals.userId,
+    });
     res.status(201).json(ticket);
   } catch {
     res.status(400).json({ error: 'Could not crete ticket' });
@@ -65,7 +68,7 @@ router.patch('/:id/status', authMiddleware, async (req, res) => {
 
   const ticket = await updateTicketStatus(id, status);
 
-  if(!ticket) {
+  if (!ticket) {
     res.status(404).json({ error: 'Ticket not found' });
     return;
   }
