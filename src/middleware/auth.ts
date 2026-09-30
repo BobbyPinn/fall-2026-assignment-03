@@ -17,7 +17,7 @@ export function authMiddleware(
     return;
   }
 
-  res.locals.suerId = userId;
+  res.locals.userId = userId;
 
   next();
 }
