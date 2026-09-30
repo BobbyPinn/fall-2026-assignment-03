@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 // GET /tickets/:id
 router.get('/:id', async (req, res) => {
   const id = Number(req.params.id);
-  const oticket = await getTicketById(id);
+  const ticket = await getTicketById(id);
 
   if (!ticket) {
     res.status(404).json({ error: 'Ticket not found' });
@@ -42,16 +42,31 @@ router.post('/', authMiddleware, async (req, res) => {
     res.status(400).json({ error: 'title is required' });
     return;
   }
+
+  try {
+    const ticket = await createTicket({
+        title,description,creator_id: res.locals.userId,});
+    res.status(201).json(ticket);
+  } catch {
+    res.status(400).json({ error: 'Could not crete ticket' });
+  }
 });
 // PATCH /tickets/:id/status
 router.patch('/:id/status', authMiddleware, async (req, res) => {
-  const id = Number(req.query.limit);
+  const id = Number(req.params.id);
   const { status } = req.body;
 
   if (!VALID_STATUSES.includes(status)) {
     res
       .status(400)
       .json({ error: 'status must be TODO, IN_PROGRESS, or DONE' });
+    return;
+  }
+
+  const ticket = await updateTicketStatus(id, status);
+
+  if(!ticket) {
+    res.status(404).json({ error: 'Ticket not found' });
     return;
   }
 
