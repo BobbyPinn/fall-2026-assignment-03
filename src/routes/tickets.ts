@@ -78,9 +78,9 @@ router.patch('/:id/status', authMiddleware, async (req, res) => {
 });
 // TODO: Student implementation - Part 2: Time Log Routes
 // POST /tickets/:id/time
-router.post('/:id/time', authMiddleware, async (require, res) => {
-  const ticketId = Number(require.params.id);
-  const { hours } = require.body;
+router.post('/:id/time', authMiddleware, async (req, res) => {
+  const ticketId = Number(req.params.id);
+  const { hours } = req.body;
 
   if (typeof hours !== 'number' || hours <= 0) {
     res.status(400).json({ error: 'hours must be a positive number' });
@@ -97,8 +97,8 @@ router.post('/:id/time', authMiddleware, async (require, res) => {
   res.status(201).json(log);
 });
 // GET /tickets/:id/time
-router.get('/:id/time', async (require, res) => {
-  const ticketId = Number(require.params.id);
+router.get('/:id/time', async (req, res) => {
+  const ticketId = Number(req.params.id);
   const totalHours = await getTotalHoursForTicket(ticketId);
 
   res.json({ ticket_id: ticketId, total_hours: totalHours });
