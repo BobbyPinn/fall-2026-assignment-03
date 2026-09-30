@@ -6,6 +6,7 @@ import {
   updateTicketStatus,
 } from '../dal/tickets.js';
 import authMiddleware from '../middleware/auth.js';
+import { insertTimeLog, getTotalHoursForTicket } from '../dal/timeLogs.js'
 
 const router = Router();
 
@@ -77,6 +78,29 @@ router.patch('/:id/status', authMiddleware, async (req, res) => {
 });
 // TODO: Student implementation - Part 2: Time Log Routes
 // POST /tickets/:id/time
-// GET /tickets/:id/time
+router.post('/:id/time', authMiddleware, async (require, res) => {
+  const ticketId = Number(require.params.id);
+  const { hours } = require.body;
 
+  if (typeof hours !== 'number' || hours <= 0) {
+    res.status(400).json({ error: 'hours must be a positive number'});
+    return;
+  }
+
+  const ticket = await getTicketById(ticketId);
+  if (!ticket) {
+    res.status(404).json({ error: 'Ticket not found'});
+    return;
+  }
+
+  const log = await insertTimeLog(ticketId, res.locals.userId, hours);
+  res.status(201).json(log);
+});
+// GET /tickets/:id/time
+router.get('/:id/time', async (require, res) => {
+  const ticketId = Number(require.params.id);
+  const totalHours = await getTotalHoursForTicket(ticketId);
+
+  res.json({ ticket_id: ticketId, total_hours: totalHours });
+});
 export default router;

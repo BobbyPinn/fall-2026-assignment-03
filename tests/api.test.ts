@@ -42,7 +42,7 @@ describe('Part 1: API Integration Tests', () => {
         .send({ title: 'Move me'});
 
       const res = await request(app)
-        .patch('/tickets/${created.body.id}/status')
+        .patch(`/tickets/${created.body.id}/status`)
         .set('X-User-Id', String(user.id))
         .send({ status: 'DONE'});
 
