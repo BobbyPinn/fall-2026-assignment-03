@@ -96,6 +96,6 @@ describe('Part 1: API Integration Tests', () => {
 
     const page2 = await request(app).get('/tickets?limit=2&offset=2');
     expect(page2.body.length).toBe(1);
-    expect(page2.body[0].length).toBe('Three');
+    expect(page2.body[0].title).toBe('Three');
   });
 });
