@@ -3,7 +3,7 @@ import request from 'supertest';
 import { app } from '../src/index.js';
 
 describe('Part 2: Time Logs Tests', () => {
-  it('should pass placeholder test', async () => {
+  it('sums multiple time logs for a ticket', async () => {
     // TODO: Student implementation - Part 2: Time Logging Tests
     const user = await request(app)
       .post('/users')
