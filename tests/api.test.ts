@@ -98,4 +98,30 @@ describe('Part 1: API Integration Tests', () => {
     expect(page2.body.length).toBe(1);
     expect(page2.body[0].title).toBe('Three');
   });
+
+  if('filters tickets by status', async () => {
+    const user = await makeUser();
+
+    const first = await request(app)
+    .post('/tickets')
+    .set('X-User-Id', String(user.id))
+    .send({ title: 'Will be DONE' });
+
+    await request(app)
+      .post('/tickets')
+    .set('X-User-Id', String(user.id))
+    .send({ title: 'Stays TODO' });
+
+    await request(app)
+      .patch(`/tickets/${first.body.id}/status`)
+    .set('X-User-Id', String(user.id))
+    .send({ title: 'DONE' });
+
+    const res = await request(app).get('/tickets?status=DONE');
+
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].status).toBe('DONE');
+
+  });
 });
