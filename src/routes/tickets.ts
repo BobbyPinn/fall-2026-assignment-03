@@ -6,7 +6,7 @@ import {
   updateTicketStatus,
 } from '../dal/tickets.js';
 import authMiddleware from '../middleware/auth.js';
-import { insertTimeLog, getTotalHoursForTicket } from '../dal/timeLogs.js'
+import { insertTimeLog, getTotalHoursForTicket } from '../dal/timeLogs.js';
 
 const router = Router();
 
@@ -83,13 +83,13 @@ router.post('/:id/time', authMiddleware, async (require, res) => {
   const { hours } = require.body;
 
   if (typeof hours !== 'number' || hours <= 0) {
-    res.status(400).json({ error: 'hours must be a positive number'});
+    res.status(400).json({ error: 'hours must be a positive number' });
     return;
   }
 
   const ticket = await getTicketById(ticketId);
   if (!ticket) {
-    res.status(404).json({ error: 'Ticket not found'});
+    res.status(404).json({ error: 'Ticket not found' });
     return;
   }
 
